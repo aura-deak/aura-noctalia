@@ -1,0 +1,80 @@
+# noctalia shell 配置
+# 由 ~/.config/dms/settings.json 迁移而来
+# 部署位置：~/.config/noctalia/config.toml（手写配置层）
+# 注意：~/.local/state/noctalia/settings.toml 里的 GUI 覆盖优先级更高
+
+# ---------------------------------------------------------------
+# Shell
+# 让 noctalia 自己注册 polkit 认证代理。
+# 装上它之后 pkexec / 图形化的提权请求才有密码弹窗，
+# 不用再额外装 polkit-gnome 之类的 agent。
+# 如果以后改用别的 agent，这里改回 false。
+# ---------------------------------------------------------------
+[shell]
+polkit_agent = true
+
+# polkit 弹窗的位置：floating 浮在屏幕中央
+[shell.panel]
+polkit_placement = "floating"
+polkit_position  = "center"
+
+# ---------------------------------------------------------------
+# 顶栏
+# 原 DMS：barConfigs[0]
+#   leftWidgets   = launcherButton, workspaceSwitcher, focusedWindow
+#   centerWidgets = music, clock, weather
+#   rightWidgets  = systemTray, clipboard, cpuUsage, memUsage,
+#                   notificationButton, battery, controlCenterButton
+# ---------------------------------------------------------------
+[bar]
+order = ["main"]
+
+[bar.main]
+position           = "top"
+enabled            = true
+auto_hide          = false
+reserve_space      = true
+thickness          = 34
+background_opacity = 1.0
+compositor_blur    = true
+margin_ends        = 0
+margin_edge        = 0
+padding            = 12
+widget_spacing     = 4
+radius             = 12
+concave_edge_corners = true
+start  = ["launcher", "workspaces", "active_window"]
+center = ["media", "clock", "weather"]
+end    = ["tray", "clipboard", "sysmon", "notifications", "battery", "control-center"]
+
+# 时钟：原 DMS clockFormat=12h、showSeconds=true
+[widget.clock]
+format = "{:%-I:%M:%S %p}"
+
+# ---------------------------------------------------------------
+# 程序坞
+# 原 DMS：dockConfigs[0]（enabled、autoHide、iconSize 40、groupByApp）
+# ---------------------------------------------------------------
+[dock]
+enabled        = true
+position       = "bottom"
+icon_size      = 40
+item_spacing   = 6
+auto_hide      = true
+reserve_space  = false
+show_running   = true
+
+# ---------------------------------------------------------------
+# 主题
+# 原 DMS：currentThemeName = "dynamic"（matugen 从壁纸取色）
+# noctalia 的等价物是按壁纸生成调色板
+# ---------------------------------------------------------------
+[theme]
+source  = "wallpaper"
+builtin = "Tokyo-Night"
+
+# 自动跟随壁纸取色后，把调色板写进 niri / GTK / Qt / kitty
+# 原 DMS 由 matugen 完成同样的工作
+[theme.templates]
+enable_builtin_templates = true
+builtin_ids = ["niri", "gtk3", "gtk4", "qt", "kitty"]

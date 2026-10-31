@@ -1,0 +1,199 @@
+//  ██████  ██   ██  ██████  ███████ ██ ███    ██
+//  ██      ██   ██ ██    ██ ██   ██    ██ ██  ██
+//  ███████ ███████ ██    ██ ██████  ██ ██ ██  ██
+//       ██ ██   ██ ██    ██ ██   ██ ██ ██  ██ ██
+//  ██████  ██   ██  ██████  ██   ██ ██ ██   ████
+//
+//  Noctalia 移植版：由 ~/.config/niri/config.kdl 转写。
+//  DMS 专属内容一律做了等价替换，无法等价的地方用 [移植] 标注。
+//  本文件放到 ~/.config/niri/config.kdl 后使用，include 路径按该位置解析。
+
+include "layout.kdl"
+include "animations.kdl"
+
+// 截图保存位置
+screenshot-path "~/Pictures/Screenshots/Niri-screenshots/%Y-%m-%d_%H-%M-%S.png"
+
+// 环境变量
+environment {
+    LANGUAGE "zh_CN:en"
+    LANG "zh_CN.UTF-8"
+    // 输入法环境变量
+    XMODIFIERS "@im=fcitx"
+    QT_IM_MODULES "wayland;fcitx"
+    QT_IM_MODULE "fcitx"
+    SDL_IM_MODULE "fcitx"
+    // qt主题
+    QT_QPA_PLATFORMTHEME "gtk3"
+    QT_QPA_PLATFORMTHEME_QT6 "gtk3"
+    // [移植] 原来的 QS_ICON_THEME 是 quickshell 专用的，noctalia v5 不再依赖 quickshell，已移除
+    // GTK软件使用的渲染器，可以解决n卡双显卡导致的GTK应用启动缓慢问题，AMD或Intel单显卡不需要这行设置可以注释掉
+    //GSK_RENDERER "gl"
+    // 默认文本编辑器
+    EDITOR "vim"
+}
+
+input {
+    keyboard {
+        xkb {
+        }
+        repeat-delay 250
+        repeat-rate 35
+    }
+
+    touchpad {
+        // off
+        tap
+        // dwt
+        // dwtp
+        // drag false
+        // drag-lock
+        // natural-scroll可以翻转触摸板滚动的方向
+        natural-scroll
+        //accel-speed -0.5
+        // accel-profile "flat"
+        // scroll-method "two-finger"
+        // disabled-on-external-mouse
+    }
+
+    mouse {
+        // off
+        // natural-scroll
+        // 鼠标速度
+        accel-speed -0.15
+        // 禁用鼠标加速
+        accel-profile "flat"
+        // scroll-method "no-scroll"
+        //speed of scroll,like:
+        //scroll-factor horizontal=2.0 vertical=-5.0
+    }
+
+    trackpoint {
+        // off
+        // natural-scroll
+        // accel-speed 0.2
+        // accel-profile "flat"
+        // scroll-method "on-button-down"
+        // scroll-button 273
+        // scroll-button-lock
+        // middle-emulation
+    }
+}
+
+// 自动启动
+// [移植] 原为 spawn-at-startup "dms" "run"；noctalia 用 --daemon 让启动命令初始化完就返回
+spawn-at-startup "noctalia" "--daemon"
+// 录屏修复
+spawn-sh-at-startup "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=niri LANG LANGUAGE LC_MESSAGES && /usr/lib/xdg-desktop-portal-gnome"
+// GNOME tracker修复
+spawn-sh-at-startup "systemctl --user set-environment XDG_SESSION_CLASS=user"
+// 输入法
+spawn-at-startup "fcitx5"
+// 截图音效的守护进程
+spawn-at-startup "~/.config/niri/scripts/screenshot-sound.sh"
+// 允许root通过用户的xwayland打开窗口
+spawn-at-startup "xhost" "+si:localuser:root"
+// [移植] 原为 dsearch serve（DMS 的搜索服务），noctalia 自带 launcher，不再需要
+// x11<--> 剪贴板同步
+spawn-at-startup "systemctl" "--user" "start" "linuxqq-clipsync"
+// 启动时把下载目录的文件移动到回收站
+spawn-at-startup "~/.config/niri/scripts/move-downloads-to-trash.sh"
+// 启动时删除回收站中待超过三十天的东西
+spawn-at-startup "~/.config/niri/scripts/clean-trash-older-than-30days.sh"
+
+// 取消启动niri时自动开启快捷键教程
+hotkey-overlay {
+    // Uncomment this line to disable the "Important Hotkeys" pop-up at startup.
+    skip-at-startup
+}
+
+// 隐藏窗口标题栏
+prefer-no-csd
+
+// 默认窗口规则
+window-rule {
+    // This regular expression is intentionally made as specific as possible,
+    // since this is the default config, and we want no false positives.
+    // You can get away with just app-id="wezterm" if you want.
+    match app-id=r#"^org\.wezfurlong\.wezterm$"#
+    default-column-width {}
+}
+window-rule {
+    match app-id=r#"^org\.gnome\."#
+    draw-border-with-background false
+    geometry-corner-radius 12
+    clip-to-geometry true
+}
+window-rule {
+    match app-id=r#"^gnome-control-center$"#
+    match app-id=r#"^pavucontrol$"#
+    match app-id=r#"^nm-connection-editor$"#
+    default-column-width { proportion 0.5; }
+    open-floating false
+}
+window-rule {
+    match app-id=r#"^gnome-calculator$"#
+    match app-id=r#"^galculator$"#
+    match app-id=r#"^blueman-manager$"#
+    match app-id=r#"^xdg-desktop-portal$"#
+    open-floating true
+}
+window-rule {
+    match app-id=r#"^steam$"# title=r#"^notificationtoasts_\d+_desktop$"#
+    default-floating-position x=10 y=10 relative-to="bottom-right"
+    open-focused false
+}
+window-rule {
+    match app-id=r#"^org\.wezfurlong\.wezterm$"#
+    match app-id="Alacritty"
+    match app-id="zen"
+    match app-id="com.mitchellh.ghostty"
+    match app-id="kitty"
+    draw-border-with-background false
+}
+window-rule {
+    match app-id=r#"firefox$"# title="^Picture-in-Picture$"
+    match app-id="zoom"
+    open-floating true
+}
+// [移植] 原规则匹配 com.danklinux.dms，改为 noctalia 的设置窗口
+window-rule {
+    match app-id=r#"^(dev\.noctalia\.Noctalia|noctalia)$"#
+    open-floating true
+}
+
+debug {
+    // 放宽聚焦拦截，修复点击托盘程序无法跳转聚焦的问题。
+    honor-xdg-activation-with-invalid-serial
+}
+
+// ---- 以下为 dms/ 目录里那批文件的移植位置 ----
+include "noctalia/binds.kdl"
+include "noctalia/alttab.kdl"
+include "noctalia/supertab.kdl"
+include optional=true "shorin-windowrules.kdl"
+include optional=true "noctalia/windowrules.kdl"
+include "noctalia/cursor.kdl"
+include "noctalia/outputs.kdl"
+
+// [移植] 原为 include "dms/colors.kdl"。
+// noctalia 通过 niri 模板自己写 ~/.config/niri/noctalia.kdl（调色板来自壁纸）。
+// 模板不覆盖的部分在这里补齐，保持和原来一致的观感。
+layout {
+    background-color "transparent"
+
+    shadow {
+        color "#00000070"
+    }
+}
+include optional=true "noctalia.kdl"
+
+// 虚拟显示器（vkms 模块），独立文件避免被覆盖 outputs.kdl
+include "vkms-output.kdl"
+
+// 取消下面这行的注释启动shorin预先准备好的blur配置
+include "blur.kdl"
+
+include "noctalia/layout.kdl"
+include "noctalia/input.kdl"
+include "autostart.kdl"

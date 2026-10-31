@@ -1,0 +1,8 @@
+// 移植自 dms/wpblur.kdl（原由 DMS 自动生成）
+// DMS 用 dms:blurwallpaper 这个 layer namespace 画模糊壁纸，
+// noctalia v5 对应的是 noctalia-wallpaper。
+// 若 niri msg layers 里实际 namespace 不同，改这一行即可。
+layer-rule {
+    match namespace="^noctalia-wallpaper$"
+    place-within-backdrop true
+}

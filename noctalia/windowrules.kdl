@@ -1,0 +1,15 @@
+// 移植自 dms/windowrules.kdl（原由 DMS 自动生成）
+// noctalia 的 bar / panel 是 layer-shell 表面，不产生窗口；
+// 只有设置窗口是普通窗口，需要浮动。
+
+// @id=noctalia-floating-windows @name=Noctalia Floating Windows
+window-rule {
+    match app-id="^(dev\\.noctalia\\.Noctalia|noctalia)$"
+    open-floating true
+}
+
+// @id=noctalia-window-opaque @name=Noctalia Window Opaque
+window-rule {
+    match app-id="^(dev\\.noctalia\\.Noctalia|noctalia)$"
+    opacity 1.00
+}
