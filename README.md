@@ -1,6 +1,10 @@
 # DMS → Noctalia 移植说明
+> [!NOTE]
+> 大肥鱼，好样的！
 
-大肥鱼，好样的！
+> [!IMPORTANT]
+> 这个移植使用的是我电脑里的某个未知版本（安装于26/9/26，因为shorin更新程序的保护机制而未能得到更新），而不是最新版  
+> 另外，我自己也往里面加了一些符合个人习惯的新配置。可按`Mod + Shift + /`查看
 
 把原来由 DMS（DankMaterialShell）提供的 shell 层功能，换成 Noctalia v5。
 窗口管理、布局、动画、输入、窗口规则这些属于 compositor 的部分原样保留，Noctalia 不接管。
