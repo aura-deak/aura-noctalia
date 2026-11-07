@@ -2,12 +2,24 @@
 > [!NOTE]
 > 大肥鱼，好样的！
 
+> [!NOTE]
+> 上游是[SHORiN-KiWATA/shorin-dux-niri](https://github.com/SHORiN-KiWATA/shorin-dux-niri)
+
 > [!IMPORTANT]
 > 这个移植使用的是我电脑里的某个未知版本（安装于26/9/26，因为shorin更新程序的保护机制而未能得到更新），而不是最新版  
-> 另外，我自己也往里面加了一些符合个人习惯的新配置。可按`Mod + Shift + /`查看
+> 另外，我自己也往里面加了一些符合个人习惯的新配置。可按`Mod + Shift + /`查看  
+> 其本质是为我个人便利而使用的移植，顺便上传Github公开
 
 把原来由 DMS（DankMaterialShell）提供的 shell 层功能，换成 Noctalia v5。
 窗口管理、布局、动画、输入、窗口规则这些属于 compositor 的部分原样保留，Noctalia 不接管。
+
+## 赞助
+
+放个上游的赞助信息在这里（？）
+
+<img src="https://raw.githubusercontent.com/SHORiN-KiWATA/.github/main/images/wechat.jpg" width="200" alt="微信赞赏码"> <img src="https://raw.githubusercontent.com/SHORiN-KiWATA/.github/main/images/alipay.png" width="134" alt="支付宝收款码">
+
+手机上看可以打开 [赞助页](https://github.com/SHORiN-KiWATA/.github/blob/main/SPONSOR.md)，支付宝能直接点链接付款。
 
 ## 目录结构
 
